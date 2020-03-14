@@ -49,6 +49,15 @@ def clean():
     df = merge_level(df, "3")
     df = merge_level(df, "4")
     df = df.merge(pd.read_csv("raw/zipcodes.csv", dtype=str), on="Code")
+    centroids = pd.concat(
+        [
+            pd.read_csv("raw/centroids_barangay.csv", dtype=str),
+            pd.read_csv("raw/centroids_municity.csv", dtype=str),
+            pd.read_csv("raw/centroids_province.csv", dtype=str),
+            pd.read_csv("raw/centroids_region.csv", dtype=str),
+        ]
+    )[["X", "Y", "Code"]]
+    df = df.merge(centroids, on="Code")
     df.fillna("").to_csv("psgc.csv", index=False)
 
 
